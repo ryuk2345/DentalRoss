@@ -427,7 +427,13 @@ export default function App() {
               <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">Contacto</h4>
               <div className="space-y-4 text-xs font-medium">
                 <div className="flex items-center gap-3"><Mail className="text-accent" size={16}/><p className="text-white/80">ventas@boticadentalross.com</p></div>
-                <div className="flex items-center gap-3"><Phone className="text-accent" size={16}/><p className="text-white/80">+51 (01) 680-4567</p></div>
+                <div className="flex items-start gap-3">
+                  <Phone className="text-accent mt-0.5" size={16}/>
+                  <div className="space-y-1">
+                    <p className="text-white/80"><strong>Sede San Luis:</strong> +51 965 192 180</p>
+                    <p className="text-white/80"><strong>Sede Surco:</strong> +51 948 281 759</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
