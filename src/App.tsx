@@ -2,6 +2,25 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRightCircle, Zap, ShieldCheck, Truck, Menu, X, Search, MapPin, BadgeCheck, Package, Headphones, ChevronDown, Send, MessageCircle, Mail, Phone } from 'lucide-react';
 
+// ==========================================
+// CONFIGURACIÓN CENTRAL DE WHATSAPP
+// Agrega o quita números aquí y toda la web
+// los usará automáticamente en rotación.
+// ==========================================
+const WA_NUMBERS = [
+  { phone: '51965192180', agent: 'Agente 1' },
+  { phone: '51948281759', agent: 'Agente 2' },
+];
+
+/** Devuelve el número de WA siguiente en rotación (round-robin por sesión) */
+const getNextWaNumber = (): string => {
+  const key = 'wa_agent_index';
+  const current = parseInt(sessionStorage.getItem(key) ?? '0', 10);
+  const next = (current + 1) % WA_NUMBERS.length;
+  sessionStorage.setItem(key, String(next));
+  return WA_NUMBERS[current].phone;
+};
+
 const catalogItems = [
   { id: 1, category: "cirugia", name: "Agujas Cortas y Largas", brand: "NOP SPIDENT", desc: "Agujas dentales descartables para la aplicación de anestesia local en diferentes técnicas.", price: "S/ 25.00" },
   { id: 2, category: "profilaxis", name: "Pasta Profiláctica", brand: "MAQUIRA", desc: "Pasta para profilaxis dental indicada en la limpieza y pulido durante tratamientos odontológicos.", price: "S/ 20.00" },
@@ -47,8 +66,8 @@ export default function App() {
   });
 
   const sendWa = (msg: string) => {
-    const phoneNumber = "51900000000";
-    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, "_blank");
+    const phone = getNextWaNumber();
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
     setWaMessage('');
     setIsWaOpen(false);
   };
