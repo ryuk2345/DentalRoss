@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRightCircle, Zap, ShieldCheck, Truck, Menu, X, Search, MapPin, BadgeCheck, Package, Headphones, ChevronDown, Send, MessageCircle, Camera, Share2, Mail, Phone } from 'lucide-react';
-import bgImage from './assets/hero-bg.png';
+import { ArrowRightCircle, Zap, ShieldCheck, Truck, Menu, X, Search, MapPin, BadgeCheck, Package, Headphones, ChevronDown, Send, MessageCircle, Mail, Phone } from 'lucide-react';
 
 const catalogItems = [
   { id: 1, category: "cirugia", name: "Agujas Cortas y Largas", brand: "NOP SPIDENT", desc: "Agujas dentales descartables para la aplicación de anestesia local en diferentes técnicas.", price: "S/ 25.00" },
@@ -19,21 +18,10 @@ export default function App() {
   const [isWaOpen, setIsWaOpen] = useState(false);
   const [waMessage, setWaMessage] = useState('');
   const [scrolled, setScrolled] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
-    
-    // Forzar reproducción del video para evitar bloqueos del navegador
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(e => console.log("Autoplay prevented:", e));
-    }
-    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -67,19 +55,20 @@ export default function App() {
 
   return (
     <div className="relative w-full min-h-screen font-body text-text overflow-x-hidden bg-surface-bg">
-      {/* Hero Section */}
-      <div className="relative w-full min-h-[680px] lg:min-h-[750px] flex items-center overflow-hidden">
-        {/* Hero Background Image - imported directly via Vite */}
-        <img
-          src={bgImage}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover -z-10"
+      {/* Hero Section - background set via CSS backgroundImage, 100% reliable */}
+      <div
+        className="relative w-full min-h-[680px] lg:min-h-[750px] flex items-center overflow-hidden"
+        style={{
+          backgroundImage: `url('/hero-bg.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to right, rgba(8,14,70,0.82) 0%, rgba(20,38,160,0.65) 55%, rgba(8,14,70,0.45) 100%)' }}
         />
-        {/* Overlay: dark-to-transparent so text is readable but image shines through */}
-        <div className="absolute inset-0 z-0" style={{
-          background: 'linear-gradient(to right, rgba(10,15,37,0.75) 0%, rgba(13,20,100,0.50) 60%, rgba(13,20,100,0.25) 100%)'
-        }}></div>
 
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0f25]/90 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-5 sm:py-6'}`}>
           <div className="max-w-[1280px] mx-auto px-5 sm:px-8 flex items-center justify-between">
