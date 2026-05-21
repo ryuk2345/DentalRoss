@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRightCircle, Zap, ShieldCheck, Truck, Menu, X, Search, MapPin, BadgeCheck, Package, Headphones, ChevronDown, Send, MessageCircle, Camera, Share2, Mail, Phone } from 'lucide-react';
+import bgVideo from './assets/video.mp4';
 
 const catalogItems = [
   { id: 1, category: "cirugia", name: "Agujas Cortas y Largas", brand: "NOP SPIDENT", desc: "Agujas dentales descartables para la aplicación de anestesia local en diferentes técnicas.", price: "S/ 25.00" },
@@ -28,6 +29,8 @@ export default function App() {
     
     // Forzar reproducción del video para evitar bloqueos del navegador
     if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
       videoRef.current.play().catch(e => console.log("Autoplay prevented:", e));
     }
     
@@ -67,14 +70,16 @@ export default function App() {
       {/* Hero Section */}
       <div className="relative w-full min-h-[680px] lg:min-h-[750px] flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-[#0a0f25]/70 z-0"></div>
-        <div 
-          className="absolute inset-0 w-full h-full -z-10"
-          dangerouslySetInnerHTML={{
-            __html: `<video autoplay muted loop playsinline class="w-full h-full object-cover">
-              <source src="/video.mp4" type="video/mp4" />
-            </video>`
-          }}
-        />
+        <video 
+          ref={videoRef} 
+          autoPlay 
+          muted 
+          loop 
+          playsInline 
+          className="absolute inset-0 w-full h-full object-cover -z-10"
+        >
+          <source src={bgVideo} type="video/mp4" />
+        </video>
 
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0f25]/90 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-5 sm:py-6'}`}>
           <div className="max-w-[1280px] mx-auto px-5 sm:px-8 flex items-center justify-between">
