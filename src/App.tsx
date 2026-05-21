@@ -66,10 +66,15 @@ export default function App() {
     <div className="relative w-full min-h-screen font-body text-text overflow-x-hidden bg-surface-bg">
       {/* Hero Section */}
       <div className="relative w-full min-h-[680px] lg:min-h-[750px] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a269c]/70 via-[#2232C2]/60 to-[#141d73]/70 z-0 mix-blend-multiply"></div>
-        <video ref={videoRef} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover -z-10">
-          <source src="/video.mp4" type="video/mp4" />
-        </video>
+        <div className="absolute inset-0 bg-[#0a0f25]/70 z-0"></div>
+        <div 
+          className="absolute inset-0 w-full h-full -z-10"
+          dangerouslySetInnerHTML={{
+            __html: `<video autoplay muted loop playsinline class="w-full h-full object-cover">
+              <source src="/video.mp4" type="video/mp4" />
+            </video>`
+          }}
+        />
 
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0f25]/90 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-5 sm:py-6'}`}>
           <div className="max-w-[1280px] mx-auto px-5 sm:px-8 flex items-center justify-between">
