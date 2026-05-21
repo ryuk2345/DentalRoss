@@ -3,23 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRightCircle, Zap, ShieldCheck, Truck, Menu, X, Search, MapPin, BadgeCheck, Package, Headphones, ChevronDown, Send, MessageCircle, Mail, Phone } from 'lucide-react';
 
 // ==========================================
-// CONFIGURACIÓN CENTRAL DE WHATSAPP
-// Agrega o quita números aquí y toda la web
-// los usará automáticamente en rotación.
+// CONFIGURACIÓN DE SEDES Y CONTACTOS
 // ==========================================
-const WA_NUMBERS = [
-  { phone: '51965192180', agent: 'Agente 1' },
-  { phone: '51948281759', agent: 'Agente 2' },
+const SEDES = [
+  {
+    id: 'san-luis',
+    name: 'San Luis',
+    address: 'Av. San Luis 1449, San Luis',
+    phone: '51965192180',
+    display: '965 192 180',
+    color: '#2232C2',
+  },
+  {
+    id: 'surco',
+    name: 'Surco',
+    address: 'Av. Primavera 244, Chacarilla',
+    phone: '51948281759',
+    display: '948 281 759',
+    color: '#5DBEBD',
+  },
 ];
-
-/** Devuelve el número de WA siguiente en rotación (round-robin por sesión) */
-const getNextWaNumber = (): string => {
-  const key = 'wa_agent_index';
-  const current = parseInt(sessionStorage.getItem(key) ?? '0', 10);
-  const next = (current + 1) % WA_NUMBERS.length;
-  sessionStorage.setItem(key, String(next));
-  return WA_NUMBERS[current].phone;
-};
 
 const catalogItems = [
   { id: 1, category: "cirugia", name: "Agujas Cortas y Largas", brand: "NOP SPIDENT", desc: "Agujas dentales descartables para la aplicación de anestesia local en diferentes técnicas.", price: "S/ 25.00" },
@@ -37,6 +40,8 @@ export default function App() {
   const [isWaOpen, setIsWaOpen] = useState(false);
   const [waMessage, setWaMessage] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  // Modal selector de sede
+  const [pendingMessage, setPendingMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -65,15 +70,80 @@ export default function App() {
     return matchesCategory && matchesSearch;
   });
 
+  // sendWa ahora muestra el selector de sede primero
   const sendWa = (msg: string) => {
-    const phone = getNextWaNumber();
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
-    setWaMessage('');
     setIsWaOpen(false);
+    setPendingMessage(msg);
+  };
+
+  // Una vez elegida la sede, abre WhatsApp con el número correcto
+  const confirmSede = (phone: string) => {
+    if (!pendingMessage) return;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pendingMessage)}`, '_blank');
+    setWaMessage('');
+    setPendingMessage(null);
   };
 
   return (
     <div className="relative w-full min-h-screen font-body text-text overflow-x-hidden bg-surface-bg">
+
+      {/* ========== MODAL SELECTOR DE SEDE ========== */}
+      <AnimatePresence>
+        {pendingMessage !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#0a0f25]/70 backdrop-blur-sm"
+            onClick={() => setPendingMessage(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="bg-[#2232C2] px-6 py-5 flex items-center justify-between">
+                <div>
+                  <h3 className="text-white font-bold text-sm uppercase tracking-wider">Selecciona tu Sede</h3>
+                  <p className="text-white/70 text-xs mt-0.5">¿A qué local deseas enviar tu consulta?</p>
+                </div>
+                <button onClick={() => setPendingMessage(null)} className="text-white/60 hover:text-white transition-colors p-1">
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Sede Options */}
+              <div className="p-5 space-y-3">
+                {SEDES.map(sede => (
+                  <button
+                    key={sede.id}
+                    onClick={() => confirmSede(sede.phone)}
+                    className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-[#e2e8f0] hover:border-[#2232C2] hover:bg-[#2232C2]/5 transition-all duration-200 text-left group"
+                  >
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors" style={{ backgroundColor: `${sede.color}15` }}>
+                      <MapPin size={22} style={{ color: sede.color }} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-sm text-[#0f172a] uppercase tracking-wide">{sede.name}</p>
+                      <p className="text-[#475569] text-xs mt-0.5">{sede.address}</p>
+                      <p className="text-xs font-bold mt-1" style={{ color: sede.color }}>📱 {sede.display}</p>
+                    </div>
+                    <ArrowRightCircle size={20} className="text-[#2232C2] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                  </button>
+                ))}
+              </div>
+
+              <p className="text-center text-[10px] text-[#94a3b8] pb-4 px-6">
+                Serás redirigido a WhatsApp con tu consulta lista para enviar.
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Hero Section - background set via CSS backgroundImage, 100% reliable */}
       <div
         className="relative w-full min-h-[680px] lg:min-h-[750px] flex items-center overflow-hidden"
