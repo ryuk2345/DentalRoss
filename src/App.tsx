@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRightCircle, Zap, ShieldCheck, Truck, Menu, X, Search, MapPin, BadgeCheck, Package, Headphones, ChevronDown, Send, MessageCircle, Camera, Share2, Mail, Phone } from 'lucide-react';
-import bgVideo from './assets/video.mp4';
 
 const catalogItems = [
   { id: 1, category: "cirugia", name: "Agujas Cortas y Largas", brand: "NOP SPIDENT", desc: "Agujas dentales descartables para la aplicación de anestesia local en diferentes técnicas.", price: "S/ 25.00" },
@@ -69,17 +68,17 @@ export default function App() {
     <div className="relative w-full min-h-screen font-body text-text overflow-x-hidden bg-surface-bg">
       {/* Hero Section */}
       <div className="relative w-full min-h-[680px] lg:min-h-[750px] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-[#0a0f25]/70 z-0"></div>
-        <video 
-          ref={videoRef} 
-          autoPlay 
-          muted 
-          loop 
-          playsInline 
+        {/* Hero Background Image */}
+        <img
+          src="/hero-bg.jpg"
+          alt=""
+          aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover -z-10"
-        >
-          <source src={bgVideo} type="video/mp4" />
-        </video>
+        />
+        {/* Layered gradient overlay for readability */}
+        <div className="absolute inset-0 z-0" style={{
+          background: 'linear-gradient(135deg, rgba(13,20,100,0.88) 0%, rgba(34,50,194,0.78) 50%, rgba(10,15,37,0.92) 100%)'
+        }}></div>
 
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0f25]/90 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-5 sm:py-6'}`}>
           <div className="max-w-[1280px] mx-auto px-5 sm:px-8 flex items-center justify-between">
