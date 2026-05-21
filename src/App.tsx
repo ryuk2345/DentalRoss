@@ -77,7 +77,7 @@ export default function App() {
         />
         {/* Layered gradient overlay for readability */}
         <div className="absolute inset-0 z-0" style={{
-          background: 'linear-gradient(135deg, rgba(13,20,100,0.88) 0%, rgba(34,50,194,0.78) 50%, rgba(10,15,37,0.92) 100%)'
+          background: 'linear-gradient(135deg, rgba(13,20,100,0.55) 0%, rgba(34,50,194,0.45) 50%, rgba(10,15,37,0.65) 100%)'
         }}></div>
 
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0f25]/90 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-5 sm:py-6'}`}>
