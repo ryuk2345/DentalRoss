@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRightCircle, Zap, ShieldCheck, Truck, Menu, X, Search, MapPin, BadgeCheck, Package, Headphones, ChevronDown, Send, MessageCircle, Camera, Share2, Mail, Phone } from 'lucide-react';
 
@@ -18,12 +18,19 @@ export default function App() {
   const [isWaOpen, setIsWaOpen] = useState(false);
   const [waMessage, setWaMessage] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
+    
+    // Forzar reproducción del video para evitar bloqueos del navegador
+    if (videoRef.current) {
+      videoRef.current.play().catch(e => console.log("Autoplay prevented:", e));
+    }
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -59,8 +66,8 @@ export default function App() {
     <div className="relative w-full min-h-screen font-body text-text overflow-x-hidden bg-surface-bg">
       {/* Hero Section */}
       <div className="relative w-full min-h-[680px] lg:min-h-[750px] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a269c]/90 via-[#2232C2]/80 to-[#141d73]/90 z-0 mix-blend-multiply"></div>
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a269c]/70 via-[#2232C2]/60 to-[#141d73]/70 z-0 mix-blend-multiply"></div>
+        <video ref={videoRef} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover -z-10">
           <source src="/video.mp4" type="video/mp4" />
         </video>
 
